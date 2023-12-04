@@ -4,6 +4,7 @@ const Problem1 = () => {
   const [show, setShow] = useState("all");
   const [tasks, setTasks] = useState([]);
 
+  //   handle submit function
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event?.target;
@@ -13,6 +14,7 @@ const Problem1 = () => {
     form.reset();
   };
 
+  //   filtered task based on show
   const filteredTasks = () => {
     if (show === "active") {
       return tasks.filter((task) => task.status === "active");
@@ -20,7 +22,7 @@ const Problem1 = () => {
       return tasks.filter((task) => task.status === "completed");
     } else {
       return [
-          ...tasks.filter((task) => task.status === "active"),
+        ...tasks.filter((task) => task.status === "active"),
         ...tasks.filter((task) => task.status === "completed"),
         ...tasks.filter(
           (task) => task.status !== "active" && task.status !== "completed"
@@ -28,11 +30,8 @@ const Problem1 = () => {
       ];
     }
   };
-  
 
   const displayedTasks = filteredTasks();
-
-  // Sort the tasks based on the specified conditions
 
   return (
     <div className="container">
