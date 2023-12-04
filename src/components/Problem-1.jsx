@@ -1,26 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Problem1 = () => {
   const [show, setShow] = useState("all");
+  const [tasks, setTasks] = useState([]);
 
-  const handleClick = (event) => {
-    event.preventDefault()
-    const form = event?.target
-    // setShow(val);
-    console.log(form)
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event?.target;
+    const name = form?.name?.value;
+    const status = form?.status?.value;
+    setTasks([...tasks, { name, status }]);
+    form.reset();
   };
+
+  const filteredTasks = () => {
+    if (show === "active") {
+      return tasks.filter((task) => task.status === "active");
+    } else if (show === "completed") {
+      return tasks.filter((task) => task.status === "completed");
+    } else {
+      return [
+          ...tasks.filter((task) => task.status === "active"),
+        ...tasks.filter((task) => task.status === "completed"),
+        ...tasks.filter(
+          (task) => task.status !== "active" && task.status !== "completed"
+        ),
+      ];
+    }
+  };
+  
+
+  const displayedTasks = filteredTasks();
+
+  // Sort the tasks based on the specified conditions
 
   return (
     <div className="container">
       <div className="row justify-content-center mt-5">
         <h4 className="text-center text-uppercase mb-5">Problem-1</h4>
         <div className="col-6 ">
-          <form onSubmit={handleClick} className="row gy-2 gx-3 align-items-center mb-4">
+          <form
+            onSubmit={handleSubmit}
+            className="row gy-2 gx-3 align-items-center mb-4"
+          >
             <div className="col-auto">
-              <input type="text" className="form-control" placeholder="Name" />
+              <input
+                name="name"
+                type="text"
+                className="form-control"
+                placeholder="Name"
+              />
             </div>
             <div className="col-auto">
               <input
+                name="status"
                 type="text"
                 className="form-control"
                 placeholder="Status"
@@ -39,7 +72,7 @@ const Problem1 = () => {
               <button
                 className={`nav-link ${show === "all" && "active"}`}
                 type="button"
-                onClick={() => handleClick("all")}
+                onClick={() => setShow("all")}
               >
                 All
               </button>
@@ -48,7 +81,7 @@ const Problem1 = () => {
               <button
                 className={`nav-link ${show === "active" && "active"}`}
                 type="button"
-                onClick={() => handleClick("active")}
+                onClick={() => setShow("active")}
               >
                 Active
               </button>
@@ -57,7 +90,7 @@ const Problem1 = () => {
               <button
                 className={`nav-link ${show === "completed" && "active"}`}
                 type="button"
-                onClick={() => handleClick("completed")}
+                onClick={() => setShow("completed")}
               >
                 Completed
               </button>
@@ -71,7 +104,14 @@ const Problem1 = () => {
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {displayedTasks.map((task, idx) => (
+                <tr key={idx}>
+                  <td>{task.name}</td>
+                  <td>{task.status}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
